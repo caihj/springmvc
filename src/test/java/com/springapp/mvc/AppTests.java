@@ -36,7 +36,7 @@ public class AppTests {
     @Test
     public void simple() throws Exception {
 
-        mockMvc.perform(get("/"))
+        mockMvc.perform(get("/spring/"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("hello"))
 
