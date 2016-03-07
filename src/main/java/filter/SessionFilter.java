@@ -39,7 +39,7 @@ public class SessionFilter implements Filter {
 
 class SessionRequest extends HttpServletRequestWrapper{
 
-    private static String sessionKey="FSESSION";
+    private static String sessionKey="FSESSIONID";
 
     private ServletResponse resp;
 
@@ -82,7 +82,8 @@ class SessionRequest extends HttpServletRequestWrapper{
 
         String uuid=UUID.randomUUID().toString();
 
-        resp.addCookie(new Cookie(sessionKey,uuid));
+        Cookie cookie=new Cookie(sessionKey,uuid);
+        resp.addCookie(cookie);
 
         return uuid;
     }

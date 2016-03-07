@@ -7,7 +7,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +26,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.io.InputStream;
+import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -48,18 +51,22 @@ public class AppTests {
     @Test
     public void simple() throws Exception {
 
-        mockMvc.perform(get("/hello")).andDo(MockMvcResultHandlers.print()).andReturn();
+        MvcResult result=mockMvc.perform(get("/hello")).andDo(MockMvcResultHandlers.print()).andReturn();
+
+        System.out.println(result.getResponse().getForwardedUrl());
 
 
+        Map<String,Object> map=mockMvc.perform(get("/vm/getpage")).andDo(MockMvcResultHandlers.print()).andReturn().getModelAndView().getModel();
 
-//        HttpClient httpclient = new DefaultHttpClient();
-//        HttpGet httpget = new HttpGet("http://localhost:8080/hello");
-//        System.out.println(JSONObject.toJSONString(httpget.getAllHeaders()));
-//        org.apache.http.HttpResponse rsp=httpclient.execute(httpget);
-//        while(rsp.getEntity().getContent().available()>0)
-//        {
-//            System.out.write(rsp.getEntity().getContent().read());
-//        }
+        for (Map.Entry item:map.entrySet())
+        {
+            System.out.println(item);
+        }
+
+        Object a=mockMvc.perform(get("/vm/getjson")).andDo(MockMvcResultHandlers.print()).andReturn().getResponse();
+        System.out.println(a.toString());
+
+
 
     }
 
@@ -127,14 +134,43 @@ public class AppTests {
     }
 
     @Test
-    public void simple4()
+    public void simple4() throws Exception
     {
+        HttpClient httpclient = HttpClients.custom().build();
+        HttpGet httpget = new HttpGet("http://www.baidu.com");
 
+        org.apache.http.HttpResponse rsp=httpclient.execute(httpget);
+
+
+        while(rsp.getEntity().getContent().available()>0)
+        {
+            System.out.write(rsp.getEntity().getContent().read());
+        }
 
 
     }
 
+    @Test
+    public void IntegerTest()
+    {
+        Integer a = 1;
+        Integer b = 2;
+        Integer c = 3;
+        Integer d = 3;
+        Integer e = 321;
+        Integer f = 321;
+        Long g = 3L;
 
+        System.out.println(c+0==d+0);
+        System.out.println(e+0==f+0);
+        System.out.println(c+0==(a+b)+0);
+        System.out.println(c.equals(a+b));
+
+
+        System.out.println(g.intValue()==(a+b));
+
+        System.out.println(g==(a+b));
+    }
 
 
 }
