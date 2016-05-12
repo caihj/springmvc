@@ -1,5 +1,6 @@
 package com.springapp.mvc;
 
+import com.alibaba.fastjson.JSON;
 import com.springapp.mvc.pojo.Animal;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.stereotype.Controller;
@@ -32,9 +33,8 @@ public class HelloController {
         model.addAttribute("message","this is message");
     }
 
-    @RequestMapping(value="/json",method = RequestMethod.POST)
-    public Map  json(Animal f,
-                     HttpServletRequest request) {
+    @RequestMapping(value="/postfile",method = RequestMethod.POST)
+    public Map  json(HttpServletRequest request) {
 
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
         if(isMultipart)
@@ -43,9 +43,22 @@ public class HelloController {
 
                 DefaultMultipartHttpServletRequest fileRequest =(DefaultMultipartHttpServletRequest) request;
 
+                //处理 form-data 中的  字符串字段
+                Map<String, String []> params = request.getParameterMap();
+                System.out.println(fileRequest.getContentType());
+
+                for(Map.Entry<String, String []> kv :params.entrySet()){
+                    System.out.println(kv.getKey());
+                    for( String str: kv.getValue()){
+                        System.out.println(str);
+                        System.out.println();
+                    }
+                }
+
                 System.out.println("has File upload");
                 try {
 
+                    //处理上传的文件
                     MultiValueMap<String,MultipartFile> parts = fileRequest.getMultiFileMap();
 
                     for(Map.Entry<String,List<MultipartFile>> kv:parts.entrySet())
@@ -53,6 +66,7 @@ public class HelloController {
                         System.out.println("key is " + kv.getKey());
                         for(MultipartFile file: kv.getValue())
                         {
+                            System.out.println(file.getContentType());
                             System.out.println("name  is " + file.getName()+" size is "+file.getSize());
                         }
                     }
@@ -70,11 +84,11 @@ public class HelloController {
 
 
 
-        System.out.println(" images size"+f.getImages().size());
+
 
         Map map=new HashMap();
         map.put("message", "qq22211");
-        map.put("name", f.getName());
+
         return  map;
     }
 

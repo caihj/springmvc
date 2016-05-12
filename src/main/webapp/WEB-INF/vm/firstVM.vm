@@ -1,9 +1,23 @@
 
 <html>
 <head>
+
     <title></title>
+    <script type="text/javascript">
+        function go(e)
+        {
+            e.preventDefault();
+            window.location.href="http://www.baidu.com";
+            return false;
+        }
+    </script>
 </head>
 <body>
-<h1>$message</h1>
+
+<a href="http://bing.com" onclick="go(e)">
+    点击跳转
+</a>
+
+
 </body>
 </html>
