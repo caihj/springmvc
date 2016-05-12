@@ -99,7 +99,7 @@ public class AppTests {
     public void simple3() throws Exception
     {
 
-        String url = "http://10.2.13.178:8085/";
+        String url = "http://127.0.0.1:8080/";
         String param = "action=compile&" +
                 "applicationFlag=jenkins&project=berbon&code=9999.0" +
                 "&debug=true&sourceFile=123.zip&host=bbgw.berbon.com:80&" +
